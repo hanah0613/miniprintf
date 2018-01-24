@@ -2,6 +2,30 @@
 #include <unistd.h>
 #include "prtfmt.h"
 
+static char * _itoa(int n, char *b, int radix)
+{
+	int i;
+	int deg=1;
+	int c=0;
+
+	while(1){
+		if( (n/deg) > 0 )
+			c++;
+		else
+			break;
+		deg*=radix;
+	}
+	
+	for(i=0;i<c;i++) {
+		*(b+i) = n/deg + '0';
+		n -= ((n/deg) *deg);
+		deg/=radix;
+	}
+	*(b+i)='\0';
+
+	return b;
+}
+
 static size_t _strlen(const char *s) 
 {
 	size_t count=0;
@@ -29,7 +53,6 @@ static void *_memcpy(void *d,const void *s, size_t n)
 }
 static TYPE _check_type(int flag, char type) 
 {
-
 	switch(type){
 		case 'c':
 			if((flag&SHORT) | (flag&LONG)) return ERROR;
@@ -110,10 +133,11 @@ int mini_printf(const char *fmt, ...)
 	TYPE type=NONE; 
 	va_list arg_p;
 	
+
 	va_start(arg_p, fmt);
 	for (p=fmt ; '\0'!=p ; p++) {
 		if(*p!='%') {
-		
+
 			continue;	
 		}
 
