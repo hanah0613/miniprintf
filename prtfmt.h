@@ -1,4 +1,6 @@
 
+#ifndef PRTFMT
+
 #define REVERSE 0x01
 #define POSITIVE 0x02
 #define NEGATIVE 0x04
@@ -7,6 +9,9 @@
 #define SHORT 0x10
 #define LONG 0x20
 #define WIDTHOFPRT 0x40
+
+#define STDOUT 1
+#define STDERR 2 
 
 typedef	enum {
 	ERROR=-1,
@@ -21,3 +26,5 @@ typedef	enum {
 
 typedef unsigned long size_t;
 int mini_printf(const char *fmt, ...);
+
+#endif
