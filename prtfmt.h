@@ -25,6 +25,6 @@ typedef	enum {
 } TYPE;
 
 typedef unsigned long size_t;
-int mini_printf(const char *fmt, ...);
+int mini_printf(char *fmt, ...);
 
 #endif

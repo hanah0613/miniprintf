@@ -31,10 +31,11 @@ static char * _itoa(int n, char *b, int radix)
 static int _atoi(char *s)
 {
 	int i;
-	int tmp;
+	int tmp=0;
 	for(i=0;*s!='\0';s++) {
 		i=*s-'0';
-		tmp*=10;
+		if(tmp)
+			tmp*=10;
 		tmp+=i;
 	}
 	return tmp;
@@ -63,13 +64,38 @@ static char *_strtok(char *s, const char *d)
 		for(pd=d;*pd;pd++) {
 			if(*ps==*pd)
 			{
-				ps='\0';
+				*ps='\0';
 				ps++;
-				return s
+				return s;
 			}
 		}
 	}	
 	return s;
+}
+
+static int _check_to_width(char *s, const char *d)
+{
+	char *ps;
+	const char *pd;
+	int i=0;
+	int tmp=0;
+
+	if(s==NULL)
+		return i;
+	else
+		ps=s;
+	
+	for(;*ps;ps++) {
+		for(pd=d;*pd;pd++){
+			if(*ps==*pd) break;
+				
+			tmp=*ps-'0';
+			if(i)	
+				i*=10;
+			i+=tmp;
+		}
+	}
+	return i;
 }
 
 static void *_memset(void *s, int c, size_t n) 
@@ -137,8 +163,7 @@ static char * _check_flag(int *width,int flag,char *p)
 				break;
 			case '1' ... '9':
 				{
-					char buf=_strtok(*p,check_del);
-					*width=_atoi(buf);
+					*width=_check_to_width(p,check_del);
 					flag|=WIDTHOFPRT;
 				}
 			case '.':
@@ -185,7 +210,7 @@ static void _print_hex(int i, flag)
 }
 #endif
 
-int mini_printf(const char *fmt, ...)
+int mini_printf(char *fmt, ...)
 {
 	char *p;
 	int width=0;
@@ -195,9 +220,10 @@ int mini_printf(const char *fmt, ...)
 	va_list arg_p;
 	
 	va_start(arg_p, fmt);
+	
 	for (p=fmt ; '\0'!=p ; p++) {
 		if(*p!='%') {
-			write(STDOUT,*p,1);
+			write(STDOUT,p,1);
 			continue;	
 		}
 		p++;
@@ -220,13 +246,15 @@ int mini_printf(const char *fmt, ...)
 			case HEX_LOW: 
 			case HEX_UP: {
 				if(flag&SHORT)
-					short int a = va_arg(arg_p, short int);
+					short int a = va_arg(arg_p, short);
 				else if(flag&LONG)
 					long int a = va_arg(arg_p, long int);
 				else 
 					int a = va_arg(arg_p, int);
 				_print_decimal(a, flag);
 			}
+				break;
+			default:
 				break;
 		}
 	}
