@@ -1,7 +1,7 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#define NULL 0
+#define NULL ((void*)0)
 
 #define STDOUT 1
 #define STDERR 2 

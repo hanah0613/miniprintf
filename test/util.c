@@ -69,31 +69,6 @@ char *_strtok(char *s, const char *d)
 	return s;
 }
 
-int _check_to_width(char *s, const char *d)
-{
-	char *ps;
-	const char *pd;
-	int i=0;
-	int tmp=0;
-
-	if(s==NULL)
-		return i;
-	else
-		ps=s;
-	
-	for(;*ps;ps++) {
-		for(pd=d;*pd;pd++){
-			if(*ps==*pd) break;
-				
-			tmp=*ps-'0';
-			if(i)	
-				i*=10;
-			i+=tmp;
-		}
-	}
-	return i;
-}
-
 void *_memset(void *s, int c, size_t n) 
 {
 	char *ps=(char *)s;
