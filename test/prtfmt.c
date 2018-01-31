@@ -99,9 +99,9 @@ static char* _check_type_prefix(char *p)
 	return p;
 }
 
-static TYPE _check_type(int flag, int width, int precision, int type_prefix,char type) 
+static TYPE _check_type(char *p) 
 {
-	switch(type){
+	switch(*p){
 		case 'c':
 			if((type_prefix) return ERROR;
 			return CHAR;
