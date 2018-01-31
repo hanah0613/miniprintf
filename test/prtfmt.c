@@ -150,7 +150,7 @@ int mini_printf(char *fmt, ...)
 	flag=0;
 	precision=0;
 	type_prefix=0;
-	type=NONE; 
+	type=ERROR; 
 	int fmt_len=_strlen(fmt);
 	va_list arg_p;
 	
@@ -169,16 +169,12 @@ int mini_printf(char *fmt, ...)
 		p=_check_type_prefix(p);
 		
 		if((type=_check_type(*p))==NONE) {
-			
+			write(STDOUT,'%',1);
 			continue;
 		}
-		else if((type=_check_type(*p))==ERROR) {
-		
-			continue;
-		} 
+		else if((type=_check_type(*p))==ERROR) continue;
 
 		switch(type) {
-			
 			case DECIMAL: 
 			{
 				int a = va_arg(arg_p, int);
