@@ -68,6 +68,8 @@ static char* _check_width(char *p)
 
 static char* _check_precision(char *p)
 {
+	int i=0;
+	int tmp=0;
 	char *del=CHECK_PRECISION;
 
 	if(*p=='.') {
