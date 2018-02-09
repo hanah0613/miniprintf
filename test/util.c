@@ -1,6 +1,6 @@
-#include "util.h"
+#include "include/util.h"
 
-char * _itoa(int n, char *b, int radix)
+char * _itoa(long int n, char *b, int radix)
 {
 	int i;
 	int deg=1;
@@ -16,7 +16,7 @@ char * _itoa(int n, char *b, int radix)
 	deg/=radix;
 	for(i=0;i<c;i++) {
 		*(b+i) = n/deg + '0';
-		n-=((n/deg) *deg);
+		n-=((n/deg)*deg);
 		deg/=radix;
 	}
 	*(b+i)='\0';
