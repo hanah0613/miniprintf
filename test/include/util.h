@@ -1,14 +1,16 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
+#ifndef NULL
 #define NULL ((void*)0)
+#endif
 
 #define STDOUT 1
 #define STDERR 2 
 
 typedef unsigned long size_t;
 
-char * _itoa(int n, char *b, int radix);
+char * _itoa(long int n, char *b, int radix);
 int _atoi(char *s);
 size_t _strlen(const char *s);
 char *_strtok(char *s, const char *d);
