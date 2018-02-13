@@ -3,8 +3,8 @@
 #include "include/prtfmt.h"
 #include "include/util.h"
 
-#define CHECK_WIDTH_DEL ".csbdxX\0"
-#define CHECK_PRECISION "csbdxX\0"
+#define CHECK_WIDTH_DEL ".csbdxX%\0"
+#define CHECK_PRECISION "csbdxX%\0"
 
 int width;
 int flag;
@@ -132,6 +132,9 @@ static TYPE _check_type(char *p)
 		case 'X':
 			return HEX_UP;
 			break;
+		case '%':
+			return PERCENT;
+			break;
 		default:
 			if(flag || width || precision || type_prefix) return ERROR;
 			return NONE;
@@ -144,7 +147,22 @@ static void _print_decimal(long int i)
 	char buf[12];
 	int len;
 	_memset((void *)buf, '\0', 12);
-	_itoa(i,buf,10);
+	switch (type) {
+		case DECIMAL:
+			_itoa(i,buf,10);
+			break;
+		case BINARY:
+			_itoa(i,buf,2);
+			break;
+		case HEX_LOW:
+		case HEX_UP:
+			_itoa(i,buf,16);
+			if(type==HEX_LOW)
+				_tolowercase(buf);
+			break;
+		default:
+			break;
+	}
 
 	len=_strlen(buf);
 	write(STDOUT,buf,len);
@@ -191,6 +209,9 @@ int mini_printf(char *fmt, ...)
 
 		switch(type) {
 			case DECIMAL: 
+			case BINARY: 
+			case HEX_LOW: 
+			case HEX_UP:
 			{
 				if(flag) {
 					if(flag&LONG) {
@@ -205,9 +226,12 @@ int mini_printf(char *fmt, ...)
 			}
 			case CHAR: 
 			case STRING:
-			case BINARY: 
-			case HEX_LOW: 
-			case HEX_UP:
+			case PERCENT:
+			{
+				char tmp='%';
+				write(STDOUT,&tmp,1);
+			}	
+				break;
 			default:
 				break;
 		}

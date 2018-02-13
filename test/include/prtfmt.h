@@ -18,7 +18,8 @@ typedef	enum {
 	BINARY,
 	DECIMAL,
 	HEX_LOW,
-	HEX_UP
+	HEX_UP,
+	PERCENT
 } TYPE;
 
 int mini_printf(char *fmt, ...);
