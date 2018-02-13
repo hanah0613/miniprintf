@@ -1,5 +1,18 @@
 #include "include/util.h"
 
+char * _tolowercase(char *s)
+{
+	int a=_strlen(s);
+	int i;	
+	for (i = 0; i < a; ++i) {
+		if(*(s+i)<'A'||*(s+i)>'Z')
+			continue;
+		*(s+i)+='a'-'A';
+	}
+
+	return s;
+}
+
 char * _itoa(long int n, char *b, int radix)
 {
 	int i;
@@ -16,6 +29,9 @@ char * _itoa(long int n, char *b, int radix)
 	deg/=radix;
 	for(i=0;i<c;i++) {
 		*(b+i) = n/deg + '0';
+		if(*(b+i)>'9') {
+			*(b+i)=n/deg+'A'-10;
+		}
 		n-=((n/deg)*deg);
 		deg/=radix;
 	}

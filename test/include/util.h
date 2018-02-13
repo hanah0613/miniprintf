@@ -10,6 +10,7 @@
 
 typedef unsigned long size_t;
 
+char * _tolowercase(char *s);
 char * _itoa(long int n, char *b, int radix);
 int _atoi(char *s);
 size_t _strlen(const char *s);
