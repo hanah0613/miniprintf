@@ -60,6 +60,7 @@ static char* _check_width(char *p,long long int *cnt)
 			i*=10;
 		i+=tmp;
 	}
+	if(i) flag|=SET_WID;
 	width=i;
 	return p;
 }
@@ -136,6 +137,18 @@ static TYPE _check_type(char *p)
 	}
 }
 
+static void _print_sign(char sign,int len, char *buf) {
+					
+	if(sign=='-') { 					
+		write(STDOUT,&sign,1);				
+		_memcpy((void *)buf,(void *)buf+1,len-1);			
+	} else if(flag&POSITIVE) {
+		write(STDOUT,&sign,1);
+	}
+	
+	return;
+}
+
 static void _do_flag(int len, char *buf) {
 	char sign=0;
 	switch (type) {
@@ -153,21 +166,17 @@ static void _do_flag(int len, char *buf) {
 		case STRING:
 			{
 				char tmp;
-				if(flag&FILLZERO) {
-					if(sign=='-') { 
-						_memcpy((void *)buf,(void *)buf+1,len);
-						write(STDOUT,&sign,1);
-					} else if(flag&POSITIVE) {
-						write(STDOUT,&sign,1);
-					}
-					tmp='0';
-				}
-				else 
-					tmp=' ';
 				int i;
-				int a=(precision)?precision:width;
-				a-=len;
+				int pos=width-precision;
+				int a=width-len;
+
 				for(i=0;i<a;i++) {
+					if(flag&FILLZERO) tmp='0';
+					if(flag&SET_PRE) {
+						if(i<pos) {
+							tmp=' ';	
+						} else if(i==pos) _print_sign(sign,len,buf);
+					} else if(i==0) _print_sign(sign,len,buf); 
 					write(STDOUT,&tmp,1);	
 				}
 			}
@@ -180,18 +189,10 @@ static void _do_flag(int len, char *buf) {
 }
 
 static void _write_before(int len, char *buf) {
-	if(width<len) return;
-	if(flag&NEGATIVE) return;
-	int i;
-	int a=(precision)?precision:len;
-	int t=width-a;
-
-	for(i=0;i<t;i++) {
-		if(!(flag&SET_PRE)) break;
-		char tmp=' ';
-		write(STDOUT,&tmp,1);
+	if(flag&SET_WID) {
+		if(width<len) return;
 	}
-
+	if(flag&NEGATIVE) return;
 	_do_flag(len, buf);
 
 	return;
@@ -206,6 +207,13 @@ static void _write_after(int len){
 		write(STDOUT,&tmp,1);
 	}
 	return;
+}
+
+static void _write(int len, char *buf) {
+	_write_before(len,buf);
+	write(STDOUT,buf,len);
+	_write_after(len);
+
 }
 
 static void _print_number(long int d)
@@ -237,9 +245,7 @@ static void _print_number(long int d)
 
 	if(d<0) width--;	
 	len=_strlen(buf);
-	_write_before(len,buf);
-	write(STDOUT,buf,len);
-	_write_after(len);
+	_write(len, buf);	
 }
 
 static void _print_string(char *buf) {
@@ -248,9 +254,7 @@ static void _print_string(char *buf) {
 	len=_strlen(buf);
 	if(flag&SET_PRE) len=precision;
 
-	_write_before(len,buf);
-	write(STDOUT,buf,len);
-	_write_after(len);
+	_write(len,buf);
 }
 
 int mini_printf(char *fmt, ...)

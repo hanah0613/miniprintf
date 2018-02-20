@@ -8,6 +8,7 @@
 #define FILLZERO 0x08
 
 #define SET_PRE 0x10
+#define SET_WID 0x20
 
 #define SHORT 0x01
 #define LONG  0x02
