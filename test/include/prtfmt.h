@@ -7,8 +7,13 @@
 #define NEGATIVE 0x04
 #define FILLZERO 0x08
 
+#define SET_PRE 0x10
+
 #define SHORT 0x01
 #define LONG  0x02
+
+#define NUM_SIZE 12
+#define BUF_MAX 1024
 
 typedef	enum {
 	ERROR=-1,

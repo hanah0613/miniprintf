@@ -5,7 +5,7 @@ char * _tolowercase(char *s)
 	int a=_strlen(s);
 	int i;	
 	for (i = 0; i < a; ++i) {
-		if(*(s+i)<'A'||*(s+i)>'Z')
+		if(*(s+i)<'A'||'Z'<*(s+i))
 			continue;
 		*(s+i)+='a'-'A';
 	}
@@ -15,9 +15,15 @@ char * _tolowercase(char *s)
 
 char * _itoa(long int n, char *b, int radix)
 {
-	int i;
+	int i=0;
 	int deg=1;
 	int c=0;
+
+	if(n<0) { 
+		*(b+i)='-';
+		i++;
+		n*=-1;
+	} 
 
 	while(1) {
 		if( (n/deg) > 0 )
@@ -27,7 +33,7 @@ char * _itoa(long int n, char *b, int radix)
 		deg*=radix;
 	}
 	deg/=radix;
-	for(i=0;i<c;i++) {
+	for(;i<c;i++) {
 		*(b+i) = n/deg + '0';
 		if(*(b+i)>'9') {
 			*(b+i)=n/deg+'A'-10;
@@ -97,7 +103,25 @@ void *_memcpy(void *d,const void *s, size_t n)
 {
 	char *pd=(char *)d;
 	const char *ps=(char *)s;
-	while(n--) *pd++=*ps;
+	while(n--) *pd++=*ps++;
 
 	return d;
 }
+
+void _reverse_str(char *str)
+{
+	if(str==NULL) return;
+
+	char *pd=str+_strlen(str)-1;
+	char tmp;
+
+	while (str < pd)
+	{
+		tmp=*str;
+		*str=*pd;
+		*pd=tmp;
+		
+		str++;
+		pd--;
+	}
+}	
