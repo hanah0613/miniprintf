@@ -222,10 +222,10 @@ static void _write(int len, char *buf)
 
 static void _print_number(long int d)
 {
-	char buf[NUM_SIZE];
+	char buf[BUF_MAX];
 	int len=0;
 	
-	_memset((void *)buf, '\0',NUM_SIZE);
+	_memset((void *)buf, '\0',BUF_MAX);
 	switch (type) {
 		case DECIMAL:
 			_itoa(d,buf,10);
@@ -309,18 +309,26 @@ int mini_printf(char *fmt, ...)
 
 		switch(type) {
 			case DECIMAL: 
-			case BINARY: 
-			case HEX_LOW: 
-			case HEX_UP:
-			case CHAR: 
 			{
 				if(flag&LONG) {
 					long int a = va_arg(arg_p, long int);
 					_print_number(a);
 					break;
 				}
+			}
+			case CHAR:
+			{
 				int a = va_arg(arg_p, int);
 				_print_number(a);
+				break;
+			}
+			case BINARY:
+			case HEX_LOW:
+			case HEX_UP:
+			{
+				unsigned int a = va_arg(arg_p, unsigned int);
+				_print_number(a);
+				break;
 			}
 				break;
 			case STRING:
