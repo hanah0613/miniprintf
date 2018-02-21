@@ -137,7 +137,8 @@ static TYPE _check_type(char *p)
 	}
 }
 
-static void _print_sign(char sign,int len, char *buf) {
+static void _print_sign(char sign,int len, char *buf) 
+{
 					
 	if(sign=='-') { 					
 		write(STDOUT,&sign,1);				
@@ -149,7 +150,8 @@ static void _print_sign(char sign,int len, char *buf) {
 	return;
 }
 
-static void _do_flag(int len, char *buf) {
+static void _do_flag(int len, char *buf) 
+{
 	char sign=0;
 	switch (type) {
 		case DECIMAL:
@@ -164,8 +166,9 @@ static void _do_flag(int len, char *buf) {
 		case HEX_LOW:
 		case HEX_UP:
 		case STRING:
+		case CHAR:
 			{
-				char tmp;
+				char tmp=' ';
 				int i;
 				int pos=width-precision;
 				int a=width-len;
@@ -180,15 +183,14 @@ static void _do_flag(int len, char *buf) {
 					write(STDOUT,&tmp,1);	
 				}
 			}
-			if(type!=STRING) break;
-			if(flag&REVERSE)
-			 _reverse_str(buf);	
+			break;
 		default:
 			break;
 	}
 }
 
-static void _write_before(int len, char *buf) {
+static void _write_before(int len, char *buf) 
+{
 	if(flag&SET_WID) {
 		if(width<len) return;
 	}
@@ -198,7 +200,8 @@ static void _write_before(int len, char *buf) {
 	return;
 }
 
-static void _write_after(int len){
+static void _write_after(int len)
+{
 	if(!(flag&NEGATIVE)) return;
 	int i;
 
@@ -209,7 +212,8 @@ static void _write_after(int len){
 	return;
 }
 
-static void _write(int len, char *buf) {
+static void _write(int len, char *buf) 
+{
 	_write_before(len,buf);
 	write(STDOUT,buf,len);
 	_write_after(len);
@@ -248,13 +252,20 @@ static void _print_number(long int d)
 	_write(len, buf);	
 }
 
-static void _print_string(char *buf) {
+static void _print_string(char *buf) 
+{
 	int len=0;
+	char tmp[BUF_MAX];
 
 	len=_strlen(buf);
+	_memset((void *)tmp,'\0',BUF_MAX);
+	_memcpy((void *)tmp,(void *)buf,len);
 	if(flag&SET_PRE) len=precision;
 
-	_write(len,buf);
+	if(flag&REVERSE)
+		_reverse_str(tmp);
+
+	_write(len,tmp);
 }
 
 int mini_printf(char *fmt, ...)

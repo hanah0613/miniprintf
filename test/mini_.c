@@ -16,7 +16,6 @@ int main()
     mini_printf ("[%9s]\n", "hello, world");
     mini_printf ("[%-20s]\n", "hello, world");
     mini_printf ("[%20s]\n", "hello, world");
-#if 0
     mini_printf ("[%~s]\n", "hello");
     mini_printf ("[%~20s]\n", "hello");
     mini_printf ("[%~-20s]\n", "hello");
@@ -24,6 +23,7 @@ int main()
     mini_printf ("[%4.6c]\n", 'A');
     mini_printf ("[%4.0c]\n", 'A');
     mini_printf ("[%-20c]\n", 'A');
+#if 0
     mini_printf ("[%+10x]\n", -1);
 #endif
 }

@@ -107,7 +107,7 @@ void *_memcpy(void *d,const void *s, size_t n)
 
 	return d;
 }
-
+	
 void _reverse_str(char *str)
 {
 	if(str==NULL) return;
@@ -120,8 +120,8 @@ void _reverse_str(char *str)
 		tmp=*str;
 		*str=*pd;
 		*pd=tmp;
-		
+
 		str++;
 		pd--;
 	}
-}	
+}
