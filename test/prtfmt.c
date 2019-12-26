@@ -277,7 +277,7 @@ int mini_printf(char *fmt, ...)
 	
 	va_start(arg_p, fmt);
 
-	for (p=fmt ; '\0'!=p && cnt < fmt_len ; p++, cnt++) {
+	for (p=fmt ; p!=NULL && cnt < fmt_len ; p++, cnt++) {
 		if(*p!='%') {
 			write(STDOUT,p,1);
 			continue;
